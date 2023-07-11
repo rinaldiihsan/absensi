@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 04 Jul 2023 pada 12.12
+-- Waktu pembuatan: 11 Jul 2023 pada 10.58
 -- Versi server: 10.4.27-MariaDB
 -- Versi PHP: 8.2.0
 
@@ -30,8 +30,15 @@ SET time_zone = "+00:00";
 CREATE TABLE `admin` (
   `id_admin` int(11) NOT NULL,
   `username` varchar(20) NOT NULL,
-  `password` int(20) NOT NULL
+  `password` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data untuk tabel `admin`
+--
+
+INSERT INTO `admin` (`id_admin`, `username`, `password`) VALUES
+(1, 'admin', '123');
 
 -- --------------------------------------------------------
 
@@ -42,10 +49,15 @@ CREATE TABLE `admin` (
 CREATE TABLE `guru` (
   `nip` int(20) NOT NULL,
   `nama_guru` varchar(255) NOT NULL,
-  `password` int(25) NOT NULL,
-  `latitude` text NOT NULL,
-  `longitude` text NOT NULL
+  `password` varchar(25) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data untuk tabel `guru`
+--
+
+INSERT INTO `guru` (`nip`, `nama_guru`, `password`) VALUES
+(1001, 'aldo', 'aldo111');
 
 -- --------------------------------------------------------
 
@@ -57,8 +69,17 @@ CREATE TABLE `hadir_guru` (
   `id_hadir` int(11) NOT NULL,
   `nip` int(20) NOT NULL,
   `nama_guru` varchar(255) NOT NULL,
-  `keterangan` text NOT NULL
+  `keterangan` text NOT NULL,
+  `latitude` float NOT NULL,
+  `longitude` float NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data untuk tabel `hadir_guru`
+--
+
+INSERT INTO `hadir_guru` (`id_hadir`, `nip`, `nama_guru`, `keterangan`, `latitude`, `longitude`) VALUES
+(1, 1001, 'aldo', 'sakit', 0, 0);
 
 -- --------------------------------------------------------
 
@@ -70,8 +91,17 @@ CREATE TABLE `hadir_siswa` (
   `id_hadir` int(20) NOT NULL,
   `nis` int(20) NOT NULL,
   `nama_siswa` varchar(255) NOT NULL,
-  `keterangan` text NOT NULL
+  `keterangan` text NOT NULL,
+  `latitude` float NOT NULL,
+  `longitude` float NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data untuk tabel `hadir_siswa`
+--
+
+INSERT INTO `hadir_siswa` (`id_hadir`, `nis`, `nama_siswa`, `keterangan`, `latitude`, `longitude`) VALUES
+(1, 1001, 'jamal', 'sakit', 0, 0);
 
 -- --------------------------------------------------------
 
@@ -82,9 +112,7 @@ CREATE TABLE `hadir_siswa` (
 CREATE TABLE `kepsek` (
   `nip` int(20) NOT NULL,
   `nama_kepsek` varchar(255) NOT NULL,
-  `password` int(20) NOT NULL,
-  `latitude` text NOT NULL,
-  `longitude` text NOT NULL
+  `password` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -99,6 +127,13 @@ CREATE TABLE `lokasi` (
   `longitude` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Dumping data untuk tabel `lokasi`
+--
+
+INSERT INTO `lokasi` (`id_lokasi`, `latitude`, `longitude`) VALUES
+(1, '4.013948966949593', '98.2762727868');
+
 -- --------------------------------------------------------
 
 --
@@ -109,8 +144,17 @@ CREATE TABLE `pulang_guru` (
   `id_pulang` int(20) NOT NULL,
   `nip` int(20) NOT NULL,
   `nama_guru` varchar(255) NOT NULL,
-  `keterangan` text NOT NULL
+  `keterangan` text NOT NULL,
+  `latitude` text NOT NULL,
+  `longitude` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data untuk tabel `pulang_guru`
+--
+
+INSERT INTO `pulang_guru` (`id_pulang`, `nip`, `nama_guru`, `keterangan`, `latitude`, `longitude`) VALUES
+(1, 1001, 'aldo', 'pulang', '', '');
 
 -- --------------------------------------------------------
 
@@ -122,8 +166,17 @@ CREATE TABLE `pulang_siswa` (
   `id_pulang` int(20) NOT NULL,
   `nis` int(20) NOT NULL,
   `nama_siswa` varchar(255) NOT NULL,
-  `keterangan` text NOT NULL
+  `keterangan` text NOT NULL,
+  `latitude` text NOT NULL,
+  `longitude` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data untuk tabel `pulang_siswa`
+--
+
+INSERT INTO `pulang_siswa` (`id_pulang`, `nis`, `nama_siswa`, `keterangan`, `latitude`, `longitude`) VALUES
+(1, 1001, 'jamal', 'pulang', '', '');
 
 -- --------------------------------------------------------
 
@@ -134,10 +187,16 @@ CREATE TABLE `pulang_siswa` (
 CREATE TABLE `siswa` (
   `nis` int(20) NOT NULL,
   `nama_siswa` varchar(255) NOT NULL,
-  `password` int(20) NOT NULL,
-  `latitude` text NOT NULL,
-  `longitude` text NOT NULL
+  `password` varchar(20) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data untuk tabel `siswa`
+--
+
+INSERT INTO `siswa` (`nis`, `nama_siswa`, `password`) VALUES
+(1001, 'jamal', 'jamal'),
+(1002, 'ihsan', '1001_ihsan');
 
 --
 -- Indexes for dumped tables
@@ -205,37 +264,37 @@ ALTER TABLE `siswa`
 -- AUTO_INCREMENT untuk tabel `admin`
 --
 ALTER TABLE `admin`
-  MODIFY `id_admin` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_admin` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT untuk tabel `hadir_guru`
 --
 ALTER TABLE `hadir_guru`
-  MODIFY `id_hadir` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_hadir` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT untuk tabel `hadir_siswa`
 --
 ALTER TABLE `hadir_siswa`
-  MODIFY `id_hadir` int(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_hadir` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT untuk tabel `lokasi`
 --
 ALTER TABLE `lokasi`
-  MODIFY `id_lokasi` int(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_lokasi` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT untuk tabel `pulang_guru`
 --
 ALTER TABLE `pulang_guru`
-  MODIFY `id_pulang` int(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_pulang` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT untuk tabel `pulang_siswa`
 --
 ALTER TABLE `pulang_siswa`
-  MODIFY `id_pulang` int(20) NOT NULL AUTO_INCREMENT;
+  MODIFY `id_pulang` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
