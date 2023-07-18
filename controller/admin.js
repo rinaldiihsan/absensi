@@ -35,7 +35,7 @@ const putSiswa = (req, res) => {
   const nis = req.params.nis;
   const { nama_siswa, password } = req.body;
 
-  const sql = `UPDATE siswa SET nama_siswa = '${nama_siswa}, password = '${password}' WHERE nis = ${nis}`;
+  const sql = `UPDATE siswa SET nama_siswa = '${nama_siswa}', password = '${password}' WHERE nis = ${nis}`;
 
   db.query(sql, (err, fields) => {
     if (err) response(500, 'invalid', 'error', res);
@@ -88,7 +88,7 @@ const postGuru = (req, res) => {
 const putGuru = (req, res) => {
   const nip = req.params.nip;
   const { nama_guru, password } = req.body;
-  const sql = `UPDATE guru SET nama_guru = '${nama_guru}, password = '${password}' WHERE nip = ${nip}`;
+  const sql = `UPDATE guru SET nama_guru = '${nama_guru}', password = '${password}' WHERE nip = ${nip}`;
 
   db.query(sql, (err, fields) => {
     if (err) response(500, 'invalid', 'error', res);

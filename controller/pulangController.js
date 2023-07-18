@@ -1,5 +1,6 @@
 const db = require('../db/koneksi');
 const response = require('../src/response');
+const haversineDistance = require('./radius');
 
 //pulangSiswa
 const getPulangSiswa = (res) => {
@@ -11,8 +12,18 @@ const getPulangSiswa = (res) => {
 };
 
 const postPulangSiswa = (req, res) => {
-  const { nis, keterangan } = req.body;
+  const { nis, keterangan, latitude, longitude } = req.body;
 
+  const allowedLatitude = 4.013948966949593;
+  const allowedLongitude = 98.2762727868;
+  const maxDistance = 25; // dalam meter
+
+  // Cek koordinat geografis pengguna
+  const distance = haversineDistance(latitude, longitude, allowedLatitude, allowedLongitude);
+  if (distance > maxDistance) {
+    response(403, 'invalid', 'Anda tidak dapat mengirimkan data kehadiran dari lokasi ini', res);
+    return;
+  }
   // Mencari data siswa berdasarkan nis
   const findSiswaSql = 'SELECT nama_siswa FROM siswa WHERE nis = ?';
   const findSiswaValues = [nis];
@@ -24,8 +35,8 @@ const postPulangSiswa = (req, res) => {
       const { nama_siswa } = result[0];
 
       // Memasukkan data hadir_siswa ke dalam tabel
-      const insertPulangSiswaSql = 'INSERT INTO pulang_siswa (nis, nama_siswa, keterangan) VALUES (?, ?, ?)';
-      const insertPulangSiswaValues = [nis, nama_siswa, keterangan];
+      const insertPulangSiswaSql = 'INSERT INTO pulang_siswa (nis, nama_siswa, keterangan, latitude, longitude) VALUES (?, ?, ?, ?, ?)';
+      const insertPulangSiswaValues = [nis, nama_siswa, keterangan, latitude, longitude];
 
       db.query(insertPulangSiswaSql, insertPulangSiswaValues, (err, result) => {
         if (err) {
@@ -48,9 +59,10 @@ const postPulangSiswa = (req, res) => {
 
 const putPulangSiswa = (req, res) => {
   const nis = req.params.nis;
+  const id_pulang = req.params.id;
   const { keterangan } = req.body;
 
-  const sql = `UPDATE pulang_siswa SET keterangan = '${keterangan}' WHERE nis = ${nis}`;
+  const sql = `UPDATE pulang_siswa SET keterangan = '${keterangan}' WHERE nis = ${nis} AND id_pulang = ${id_pulang}`;
 
   db.query(sql, (err, fields) => {
     if (err) response(500, 'invalid', 'error', res);
@@ -67,8 +79,9 @@ const putPulangSiswa = (req, res) => {
 };
 
 const deletePulangSiswa = (req, res) => {
+  const id_pulang = req.params.id;
   const nis = req.params.nis;
-  const sql = `DELETE FROM pulang_siswa WHERE nis = ${nis}`;
+  const sql = `DELETE FROM pulang_siswa WHERE nis = ${nis} AND id_pulang = ${id_pulang}`;
 
   db.query(sql, (err, fields) => {
     if (err) response(500, 'INVALID', 'ERROR', res);
@@ -93,9 +106,20 @@ const getPulangGuru = (res) => {
 };
 
 const postPulangGuru = (req, res) => {
-  const { nip, keterangan } = req.body;
+  const { nip, keterangan, latitude, longitude } = req.body;
 
-  // Mencari data guru berdasarkan nis
+  const allowedLatitude = 4.013948966949593;
+  const allowedLongitude = 98.2762727868;
+  const maxDistance = 25; // dalam meter
+
+  // Cek koordinat geografis pengguna
+  const distance = haversineDistance(latitude, longitude, allowedLatitude, allowedLongitude);
+  if (distance > maxDistance) {
+    response(403, 'invalid', 'Anda tidak dapat mengirimkan data kehadiran dari lokasi ini', res);
+    return;
+  }
+
+  // Mencari data guru berdasarkan nip
   const findGuruSql = 'SELECT nama_guru FROM guru WHERE nip = ?';
   const findGuruValues = [nip];
 
@@ -106,8 +130,8 @@ const postPulangGuru = (req, res) => {
       const { nama_guru } = result[0];
 
       // Memasukkan data hadir_guru ke dalam tabel
-      const insertPulangGuruSql = 'INSERT INTO pulang_guru (nip, nama_guru, keterangan) VALUES (?, ?, ?)';
-      const insertPulangGuruValues = [nip, nama_guru, keterangan];
+      const insertPulangGuruSql = 'INSERT INTO pulang_guru (nip, nama_guru, keterangan, latitude, longitude) VALUES (?, ?, ?, ?, ?)';
+      const insertPulangGuruValues = [nip, nama_guru, keterangan, latitude, longitude];
 
       db.query(insertPulangGuruSql, insertPulangGuruValues, (err, result) => {
         if (err) {
@@ -129,10 +153,11 @@ const postPulangGuru = (req, res) => {
 };
 
 const putPulangGuru = (req, res) => {
+  const id_pulang = req.params.id;
   const nip = req.params.nip;
   const { keterangan } = req.body;
 
-  const sql = `UPDATE pulang_guru SET keterangan = '${keterangan}' WHERE nip = ${nip}`;
+  const sql = `UPDATE pulang_guru SET keterangan = '${keterangan}' WHERE nip = ${nip} AND id_pulang = ${id_pulang}`;
 
   db.query(sql, (err, fields) => {
     if (err) response(500, 'invalid', 'error', res);
@@ -149,8 +174,9 @@ const putPulangGuru = (req, res) => {
 };
 
 const deletePulangGuru = (req, res) => {
+  const id_pulang = req.params.id;
   const nip = req.params.nip;
-  const sql = `DELETE FROM pulang_guru WHERE nip = ${nip}`;
+  const sql = `DELETE FROM pulang_guru WHERE nip = ${nip} AND id_pulang = ${id_pulang}`;
 
   db.query(sql, (err, fields) => {
     if (err) response(500, 'INVALID', 'ERROR', res);

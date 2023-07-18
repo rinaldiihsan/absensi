@@ -1,5 +1,6 @@
 const db = require('../db/koneksi');
 const response = require('../src/response');
+const haversineDistance = require('./radius');
 
 //hadirSiswa
 const getHadirSiswa = (res) => {
@@ -13,8 +14,14 @@ const getHadirSiswa = (res) => {
 const postHadirSiswa = (req, res) => {
   const { nis, keterangan, latitude, longitude } = req.body;
 
+  //latlong
+  const allowedLatitude = 4.013948966949593;
+  const allowedLongitude = 98.2762727868;
+  const maxDistance = 25; // dalam meter
+
   // Cek koordinat geografis pengguna
-  if (latitude !== 4.013948966949593 || longitude !== 98.2762727868) {
+  const distance = haversineDistance(latitude, longitude, allowedLatitude, allowedLongitude);
+  if (distance > maxDistance) {
     response(403, 'invalid', 'Anda tidak dapat mengirimkan data kehadiran dari lokasi ini', res);
     return;
   }
@@ -53,17 +60,21 @@ const postHadirSiswa = (req, res) => {
 };
 
 const putHadirSiswa = (req, res) => {
+  const id_hadir = req.params.id;
   const nis = req.params.nis;
   const { keterangan } = req.body;
 
-  const sql = `UPDATE hadir_siswa SET keterangan = '${keterangan}' WHERE nis = ${nis}`;
+  // Perbarui data hadir_siswa berdasarkan ID dan NIS
+  const sql = 'UPDATE hadir_siswa SET keterangan = ? WHERE id_hadir = ? AND nis = ?  ';
+  const updateValues = [keterangan, id_hadir, nis];
 
-  db.query(sql, (err, fields) => {
-    if (err) response(500, 'invalid', 'error', res);
-    if (fields?.affectedRows) {
+  db.query(sql, updateValues, (err, result) => {
+    if (err) {
+      response(500, 'invalid', 'error', res);
+    } else if (result.affectedRows > 0) {
       const data = {
-        isSuccess: fields.affectedRows,
-        message: fields.message,
+        isSuccess: result.affectedRows,
+        message: 'SUCCESS EDIT HADIR SISWA',
       };
       response(200, data, 'SUCCESS EDIT HADIR SISWA', res);
     } else {
@@ -73,8 +84,9 @@ const putHadirSiswa = (req, res) => {
 };
 
 const deleteHadirSiswa = (req, res) => {
+  const id_hadir = req.params.id;
   const nis = req.params.nis;
-  const sql = `DELETE FROM hadir_siswa WHERE nis = ${nis}`;
+  const sql = `DELETE FROM hadir_siswa WHERE nis = ${nis} AND id_hadir = ${id_hadir}`;
 
   db.query(sql, (err, fields) => {
     if (err) response(500, 'INVALID', 'ERROR', res);
@@ -101,7 +113,13 @@ const getHadirGuru = (res) => {
 const postHadirGuru = (req, res) => {
   const { nip, keterangan, latitude, longitude } = req.body;
 
-  if (latitude !== 4.013948966949593 || longitude !== 98.2762727868) {
+  const allowedLatitude = 4.013948966949593;
+  const allowedLongitude = 98.2762727868;
+  const maxDistance = 25; // dalam meter
+
+  // Cek koordinat geografis pengguna
+  const distance = haversineDistance(latitude, longitude, allowedLatitude, allowedLongitude);
+  if (distance > maxDistance) {
     response(403, 'invalid', 'Anda tidak dapat mengirimkan data kehadiran dari lokasi ini', res);
     return;
   }
@@ -140,10 +158,11 @@ const postHadirGuru = (req, res) => {
 };
 
 const putHadirGuru = (req, res) => {
+  const id_hadir = req.params.id;
   const nip = req.params.nip;
   const { keterangan } = req.body;
 
-  const sql = `UPDATE hadir_guru SET keterangan = '${keterangan}' WHERE nip = ${nip}`;
+  const sql = `UPDATE hadir_guru SET keterangan = '${keterangan}' WHERE id_hadir = ${id_hadir} AND nip = ${nip} `;
 
   db.query(sql, (err, fields) => {
     if (err) response(500, 'invalid', 'error', res);
@@ -160,8 +179,9 @@ const putHadirGuru = (req, res) => {
 };
 
 const deleteHadirGuru = (req, res) => {
+  const id_hadir = req.params.id;
   const nip = req.params.nip;
-  const sql = `DELETE FROM hadir_guru WHERE nip = ${nip}`;
+  const sql = `DELETE FROM hadir_guru WHERE nip = ${nip} AND id_hadir = ${id_hadir}`;
 
   db.query(sql, (err, fields) => {
     if (err) response(500, 'INVALID', 'ERROR', res);
