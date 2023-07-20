@@ -12,9 +12,9 @@ const getAdmin = (res) => {
 //SISWA PAGE
 
 const postSiswa = (req, res) => {
-  const { nis, nama_siswa, password } = req.body;
-  const sql = 'INSERT INTO siswa (nis, nama_siswa, password) VALUES (?, ?, ?)';
-  const values = [nis, nama_siswa, password];
+  const { nis, nama_siswa, password, whatsapp } = req.body;
+  const sql = 'INSERT INTO siswa (nis, nama_siswa, password, whatsapp) VALUES (?, ?, ?, ?)';
+  const values = [nis, nama_siswa, password, whatsapp];
 
   db.query(sql, values, (err, result) => {
     if (err) {
@@ -33,9 +33,9 @@ const postSiswa = (req, res) => {
 
 const putSiswa = (req, res) => {
   const nis = req.params.nis;
-  const { nama_siswa, password } = req.body;
+  const { nama_siswa, password, whatsapp } = req.body;
 
-  const sql = `UPDATE siswa SET nama_siswa = '${nama_siswa}', password = '${password}' WHERE nis = ${nis}`;
+  const sql = `UPDATE siswa SET nama_siswa = '${nama_siswa}', password = '${password}', whatsapp = '${whatsapp}' WHERE nis = ${nis}`;
 
   db.query(sql, (err, fields) => {
     if (err) response(500, 'invalid', 'error', res);
