@@ -12,9 +12,9 @@ const getAdmin = (res) => {
 //SISWA PAGE
 
 const postSiswa = (req, res) => {
-  const { nis, nama_siswa, password, whatsapp } = req.body;
-  const sql = 'INSERT INTO siswa (nis, nama_siswa, password, whatsapp) VALUES (?, ?, ?, ?)';
-  const values = [nis, nama_siswa, password, whatsapp];
+  const { nis, nama_siswa, kelas, password, whatsapp } = req.body;
+  const sql = 'INSERT INTO siswa (nis, nama_siswa, kelas, password, whatsapp) VALUES (?, ?, ?, ?, ?)';
+  const values = [nis, nama_siswa, kelas, password, whatsapp];
 
   db.query(sql, values, (err, result) => {
     if (err) {
