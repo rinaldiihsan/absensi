@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Waktu pembuatan: 20 Jul 2023 pada 15.14
+-- Waktu pembuatan: 22 Jul 2023 pada 18.07
 -- Versi server: 10.4.27-MariaDB
 -- Versi PHP: 8.2.0
 
@@ -71,16 +71,16 @@ CREATE TABLE `hadir_guru` (
   `nama_guru` varchar(255) NOT NULL,
   `keterangan` text NOT NULL,
   `latitude` float NOT NULL,
-  `longitude` float NOT NULL
+  `longitude` float NOT NULL,
+  `tanggal` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data untuk tabel `hadir_guru`
 --
 
-INSERT INTO `hadir_guru` (`id_hadir`, `nip`, `nama_guru`, `keterangan`, `latitude`, `longitude`) VALUES
-(1, 1001, 'aldo', 'sakit', 0, 0),
-(3, 1001, 'aldo', 'Pulang', 4.01388, 98.2762);
+INSERT INTO `hadir_guru` (`id_hadir`, `nip`, `nama_guru`, `keterangan`, `latitude`, `longitude`, `tanggal`) VALUES
+(4, 1001, 'aldo', 'Hadir', 4.01388, 98.2762, '2023-07-22');
 
 -- --------------------------------------------------------
 
@@ -92,10 +92,19 @@ CREATE TABLE `hadir_siswa` (
   `id_hadir` int(20) NOT NULL,
   `nis` int(20) NOT NULL,
   `nama_siswa` varchar(255) NOT NULL,
+  `kelas` varchar(255) NOT NULL,
   `keterangan` text NOT NULL,
   `latitude` float NOT NULL,
-  `longitude` float NOT NULL
+  `longitude` float NOT NULL,
+  `tanggal` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data untuk tabel `hadir_siswa`
+--
+
+INSERT INTO `hadir_siswa` (`id_hadir`, `nis`, `nama_siswa`, `kelas`, `keterangan`, `latitude`, `longitude`, `tanggal`) VALUES
+(26, 1008, 'paijo suka kamu', 'X-TKJ2', 'Hadir', 4.01388, 98.2762, '2023-06-25');
 
 -- --------------------------------------------------------
 
@@ -140,15 +149,16 @@ CREATE TABLE `pulang_guru` (
   `nama_guru` varchar(255) NOT NULL,
   `keterangan` text NOT NULL,
   `latitude` text NOT NULL,
-  `longitude` text NOT NULL
+  `longitude` text NOT NULL,
+  `tanggal` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data untuk tabel `pulang_guru`
 --
 
-INSERT INTO `pulang_guru` (`id_pulang`, `nip`, `nama_guru`, `keterangan`, `latitude`, `longitude`) VALUES
-(1, 1001, 'aldo', 'pulang', '', '');
+INSERT INTO `pulang_guru` (`id_pulang`, `nip`, `nama_guru`, `keterangan`, `latitude`, `longitude`, `tanggal`) VALUES
+(3, 1001, 'aldo', 'Pulang', '4.013882060502609', '98.27621333525438', '2023-07-22');
 
 -- --------------------------------------------------------
 
@@ -160,17 +170,19 @@ CREATE TABLE `pulang_siswa` (
   `id_pulang` int(20) NOT NULL,
   `nis` int(20) NOT NULL,
   `nama_siswa` varchar(255) NOT NULL,
+  `kelas` varchar(255) NOT NULL,
   `keterangan` text NOT NULL,
   `latitude` text NOT NULL,
-  `longitude` text NOT NULL
+  `longitude` text NOT NULL,
+  `tanggal` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data untuk tabel `pulang_siswa`
 --
 
-INSERT INTO `pulang_siswa` (`id_pulang`, `nis`, `nama_siswa`, `keterangan`, `latitude`, `longitude`) VALUES
-(1, 1001, 'jamal', 'pulang', '', '');
+INSERT INTO `pulang_siswa` (`id_pulang`, `nis`, `nama_siswa`, `kelas`, `keterangan`, `latitude`, `longitude`, `tanggal`) VALUES
+(3, 1008, 'paijo suka kamu', 'X-TKJ2', 'Pulang', '4.013882060502609', '98.27621333525438', '2023-07-22');
 
 -- --------------------------------------------------------
 
@@ -181,6 +193,7 @@ INSERT INTO `pulang_siswa` (`id_pulang`, `nis`, `nama_siswa`, `keterangan`, `lat
 CREATE TABLE `siswa` (
   `nis` int(20) NOT NULL,
   `nama_siswa` varchar(255) NOT NULL,
+  `kelas` varchar(255) NOT NULL,
   `password` varchar(20) NOT NULL,
   `whatsapp` varchar(13) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -189,14 +202,8 @@ CREATE TABLE `siswa` (
 -- Dumping data untuk tabel `siswa`
 --
 
-INSERT INTO `siswa` (`nis`, `nama_siswa`, `password`, `whatsapp`) VALUES
-(1001, 'jamal', 'jamal', '0'),
-(1002, 'ihsan', '1001_ihsan', '0'),
-(1004, 'Ujang Beklip2', '321', '082211223344'),
-(1005, 'paijo jemuran', '123', '081233445526'),
-(1007, 'paijo suka kamu', '123', '081233445526'),
-(1008, 'paijo suka kamu', '123', '081233445526'),
-(1009, 'ihsan', '123', '081233123');
+INSERT INTO `siswa` (`nis`, `nama_siswa`, `kelas`, `password`, `whatsapp`) VALUES
+(1008, 'paijo suka kamu', 'X-TKJ2', '123', '081233445526');
 
 --
 -- Indexes for dumped tables
@@ -270,13 +277,13 @@ ALTER TABLE `admin`
 -- AUTO_INCREMENT untuk tabel `hadir_guru`
 --
 ALTER TABLE `hadir_guru`
-  MODIFY `id_hadir` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_hadir` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT untuk tabel `hadir_siswa`
 --
 ALTER TABLE `hadir_siswa`
-  MODIFY `id_hadir` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id_hadir` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
 
 --
 -- AUTO_INCREMENT untuk tabel `lokasi`
@@ -288,13 +295,13 @@ ALTER TABLE `lokasi`
 -- AUTO_INCREMENT untuk tabel `pulang_guru`
 --
 ALTER TABLE `pulang_guru`
-  MODIFY `id_pulang` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_pulang` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT untuk tabel `pulang_siswa`
 --
 ALTER TABLE `pulang_siswa`
-  MODIFY `id_pulang` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id_pulang` int(20) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
