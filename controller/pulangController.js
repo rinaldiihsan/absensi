@@ -12,7 +12,7 @@ const getPulangSiswa = (res) => {
 };
 
 const postPulangSiswa = (req, res) => {
-  const { nis, keterangan, latitude, longitude } = req.body;
+  const { nis, keterangan, latitude, longitude, tanggal } = req.body;
 
   const allowedLatitude = 4.013948966949593;
   const allowedLongitude = 98.2762727868;
@@ -25,18 +25,18 @@ const postPulangSiswa = (req, res) => {
     return;
   }
   // Mencari data siswa berdasarkan nis
-  const findSiswaSql = 'SELECT nama_siswa FROM siswa WHERE nis = ?';
+  const findSiswaSql = 'SELECT nama_siswa, kelas FROM siswa WHERE nis = ?';
   const findSiswaValues = [nis];
 
   db.query(findSiswaSql, findSiswaValues, (err, result) => {
     if (err) {
       response(500, 'invalid', 'error', res);
     } else if (result.length > 0) {
-      const { nama_siswa } = result[0];
+      const { nama_siswa, kelas } = result[0];
 
       // Memasukkan data hadir_siswa ke dalam tabel
-      const insertPulangSiswaSql = 'INSERT INTO pulang_siswa (nis, nama_siswa, keterangan, latitude, longitude) VALUES (?, ?, ?, ?, ?)';
-      const insertPulangSiswaValues = [nis, nama_siswa, keterangan, latitude, longitude];
+      const insertPulangSiswaSql = 'INSERT INTO pulang_siswa (nis, nama_siswa,kelas, keterangan, latitude, longitude,tanggal) VALUES (?, ?, ?, ?, ?, ?, ?)';
+      const insertPulangSiswaValues = [nis, nama_siswa, kelas, keterangan, latitude, longitude, tanggal];
 
       db.query(insertPulangSiswaSql, insertPulangSiswaValues, (err, result) => {
         if (err) {
@@ -106,7 +106,7 @@ const getPulangGuru = (res) => {
 };
 
 const postPulangGuru = (req, res) => {
-  const { nip, keterangan, latitude, longitude } = req.body;
+  const { nip, keterangan, latitude, longitude, tanggal } = req.body;
 
   const allowedLatitude = 4.013948966949593;
   const allowedLongitude = 98.2762727868;
@@ -130,8 +130,8 @@ const postPulangGuru = (req, res) => {
       const { nama_guru } = result[0];
 
       // Memasukkan data hadir_guru ke dalam tabel
-      const insertPulangGuruSql = 'INSERT INTO pulang_guru (nip, nama_guru, keterangan, latitude, longitude) VALUES (?, ?, ?, ?, ?)';
-      const insertPulangGuruValues = [nip, nama_guru, keterangan, latitude, longitude];
+      const insertPulangGuruSql = 'INSERT INTO pulang_guru (nip, nama_guru, keterangan, latitude, longitude,tanggal) VALUES (?, ?, ?, ?, ?, ?)';
+      const insertPulangGuruValues = [nip, nama_guru, keterangan, latitude, longitude, tanggal];
 
       db.query(insertPulangGuruSql, insertPulangGuruValues, (err, result) => {
         if (err) {
