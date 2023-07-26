@@ -1,5 +1,5 @@
 const express = require('express');
-const { getAdmin, postSiswa, putSiswa, putGuru, deleteGuru, deleteSiswa, postGuru, postKepsek, putKepsek, deleteKepsek } = require('../controller/admin');
+const { getAdmin, postSiswa, putSiswa, putGuru, deleteGuru, deleteSiswa, postGuru, postKepsek, putKepsek, deleteKepsek, loginSiswa, loginGuru } = require('../controller/admin');
 const router = express.Router();
 const cors = require('cors');
 
@@ -18,5 +18,8 @@ router.delete('/admin/guru/:nip', cors(), deleteGuru);
 router.post('/admin/kepsek', cors(), postKepsek);
 router.put('/admin/kepsek/:nip', cors(), putKepsek);
 router.delete('/admin/kepsek/:nip', cors(), deleteKepsek);
+
+router.post('/login/siswa', cors(), loginSiswa);
+router.post('/login/guru', cors(), loginGuru);
 
 module.exports = router;

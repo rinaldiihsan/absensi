@@ -31,6 +31,26 @@ const postSiswa = (req, res) => {
   });
 };
 
+const loginSiswa = (req, res) => {
+  const { nis, password } = req.body;
+  const sql = 'SELECT * FROM siswa WHERE nis = ? AND password = ?';
+  const values = [nis, password];
+
+  db.query(sql, values, (err, result) => {
+    if (err) {
+      response(500, 'invalid', 'error', res);
+    } else if (result.length > 0) {
+      const data = {
+        isSuccess: true,
+        user: result[0],
+      };
+      response(200, data, 'LOGIN SUCCESS', res);
+    } else {
+      response(401, 'invalid', 'Invalid NIS or password', res);
+    }
+  });
+};
+
 const putSiswa = (req, res) => {
   const nis = req.params.nis;
   const { nama_siswa, password, whatsapp } = req.body;
@@ -81,6 +101,26 @@ const postGuru = (req, res) => {
         id: fields.insertId,
       };
       response(200, data, 'POST DATA GURU SUCCESS', res);
+    }
+  });
+};
+
+const loginGuru = (req, res) => {
+  const { nip, password } = req.body;
+  const sql = 'SELECT * FROM siswa WHERE nip = ? AND password = ?';
+  const values = [nip, password];
+
+  db.query(sql, values, (err, result) => {
+    if (err) {
+      response(500, 'invalid', 'error', res);
+    } else if (result.length > 0) {
+      const data = {
+        isSuccess: true,
+        user: result[0],
+      };
+      response(200, data, 'LOGIN SUCCESS', res);
+    } else {
+      response(401, 'invalid', 'Invalid NIS or password', res);
     }
   });
 };
@@ -185,4 +225,6 @@ module.exports = {
   postKepsek,
   putKepsek,
   deleteKepsek,
+  loginSiswa,
+  loginGuru,
 };

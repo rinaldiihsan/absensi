@@ -16,7 +16,7 @@ const postPulangSiswa = (req, res) => {
 
   const allowedLatitude = 4.013948966949593;
   const allowedLongitude = 98.2762727868;
-  const maxDistance = 25; // dalam meter
+  const maxDistance = 15; // dalam meter
 
   // Cek koordinat geografis pengguna
   const distance = haversineDistance(latitude, longitude, allowedLatitude, allowedLongitude);
